@@ -21,7 +21,8 @@ namespace FriendOrganizer.DataAccess.Migrations
                 new Friend { FirstName = "Jacob", LastName = "Gandis" },
                 new Friend { FirstName = "Anders", LastName = "Svensson" },
                 new Friend { FirstName = "Samuel", LastName = "Samuelsson" },
-                new Friend { FirstName = "Julia", LastName = "Assange" }
+                new Friend { FirstName = "Julia", LastName = "Kvist" },
+                new Friend { FirstName = "Lisa", LastName = "Larsson" }
                 );
         }
     }
