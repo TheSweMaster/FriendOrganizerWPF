@@ -9,6 +9,7 @@
     <Grid>
         <ListView Grid.Column="0" 
                   ItemsSource="{Binding Friends}"
+                  SelectedItem="{Binding SelectedFriend, Mode=TwoWay}"
                   DisplayMemberPath="DisplayMember"/>
     </Grid>
 </UserControl>
