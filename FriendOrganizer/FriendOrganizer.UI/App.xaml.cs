@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -19,6 +21,9 @@ namespace FriendOrganizer.UI
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-US");
+
             var bootstrapper = new Bootstrapper();
             var container = bootstrapper.Bootstrap();
 
