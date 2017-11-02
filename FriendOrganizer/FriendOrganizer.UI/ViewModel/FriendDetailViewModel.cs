@@ -71,10 +71,10 @@ namespace FriendOrganizer.UI.ViewModel
             var friend = friendId.HasValue
                 ? await _friendRepository.GetByIdAsync(friendId.Value)
                 : CreateNewFriend();
+
             InitializeFriend(friend);
 
             await LoadProgrammingLanguaguesLookupAsync();
-
         }
 
         private void InitializeFriend(Friend friend)
@@ -103,6 +103,7 @@ namespace FriendOrganizer.UI.ViewModel
         private async Task LoadProgrammingLanguaguesLookupAsync()
         {
             ProgrammingLanguages.Clear();
+            ProgrammingLanguages.Add(new NullLookupItem { DisplayMember = " - " });
             var lookup = await _programmingLanguageLookUpDataService.GetProgrammingLanguageLookUpAsync();
             foreach (var lookupItem in lookup)
             {

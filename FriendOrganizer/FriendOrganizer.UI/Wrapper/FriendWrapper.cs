@@ -19,28 +19,25 @@ namespace FriendOrganizer.UI.Wrapper
         public string FirstName
         {
             get { return GetValue<string>(); }
-            set
-            {
-                SetValue(value);
-            }
+            set { SetValue(value); }
         }
 
         public string LastName
         {
             get { return GetValue<string>(); }
-            set
-            {
-                SetValue(value);
-            }
+            set { SetValue(value); }
         }
 
         public string Email
         {
             get { return GetValue<string>(); }
-            set
-            {
-                SetValue(value);
-            }
+            set { SetValue(value); }
+        }
+
+        public int? FavoriteLanguageId
+        {
+            get { return GetValue<int?>(); }
+            set { SetValue(value); }
         }
 
         protected override IEnumerable<string> ValidateProperty(string propertyName)
