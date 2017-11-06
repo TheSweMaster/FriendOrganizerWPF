@@ -25,7 +25,7 @@ namespace FriendOrganizer.UI.ViewModel
         private IMessageDialoagService _messageDialoagService;
         private FriendWrapper _friend;
         private FriendPhoneNumberWrapper _selectedPhoneNumber;
-        private bool _hasChanges;
+        //private bool _hasChanges;
 
         public FriendDetailViewModel(IFriendRepository friendRepository,
             IEventAggregator eventAggregator,
