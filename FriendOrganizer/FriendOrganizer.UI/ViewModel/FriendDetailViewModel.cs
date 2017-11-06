@@ -22,14 +22,14 @@ namespace FriendOrganizer.UI.ViewModel
     {
         private IProgrammingLanguageLookUpDataService _programmingLanguageLookUpDataService;
         private IFriendRepository _friendRepository;
-        private IMessageDialoagService _messageDialoagService;
+        private IMessageDialogService _messageDialoagService;
         private FriendWrapper _friend;
         private FriendPhoneNumberWrapper _selectedPhoneNumber;
         //private bool _hasChanges;
 
         public FriendDetailViewModel(IFriendRepository friendRepository,
             IEventAggregator eventAggregator,
-            IMessageDialoagService messageDialoagService,
+            IMessageDialogService messageDialoagService,
             IProgrammingLanguageLookUpDataService programmingLanguageLookUpDataService)
             :base(eventAggregator)
         {

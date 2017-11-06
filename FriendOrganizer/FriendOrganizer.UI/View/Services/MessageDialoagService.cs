@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace FriendOrganizer.UI.View.Services
 {
-    public class MessageDialoagService : IMessageDialoagService
+    public class MessageDialoagService : IMessageDialogService
     {
         public MessageDialogResult ShowOkCancelDialog(string text, string title)
         {

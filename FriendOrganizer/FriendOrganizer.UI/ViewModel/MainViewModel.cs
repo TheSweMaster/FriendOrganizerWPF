@@ -1,4 +1,5 @@
-﻿using FriendOrganizer.UI.Event;
+﻿using Autofac.Features.Indexed;
+using FriendOrganizer.UI.Event;
 using FriendOrganizer.UI.View.Services;
 using Prism.Commands;
 using Prism.Events;
@@ -11,21 +12,20 @@ namespace FriendOrganizer.UI.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private IEventAggregator _eventAggregator;
-        private Func<IFriendDetailViewModel> _friendDetailViewModelCreator;
-        private IMessageDialoagService _messageDialoagService;
         private IDetailViewModel _detailViewModel;
+        private IIndex<string, IDetailViewModel> _detailViewModelCreator;
+        private IMessageDialogService _messageDialoagService;
 
         public MainViewModel(INavigationViewModel navigationViewModel,
-            Func<IFriendDetailViewModel> friendDetailViewModelCreator,
+            IIndex<string, IDetailViewModel> detailViewModelCreator,
             IEventAggregator eventAggregator,
-            IMessageDialoagService messageDialoagService)
+            IMessageDialogService messageDialoagService)
         {
             _eventAggregator = eventAggregator;
-            _friendDetailViewModelCreator = friendDetailViewModelCreator;
+            _detailViewModelCreator = detailViewModelCreator;
             _messageDialoagService = messageDialoagService;
 
             _eventAggregator.GetEvent<OpenDetailViewEvent>().Subscribe(OnOpenDetailView);
-
             _eventAggregator.GetEvent<AfterDetailDeletedEvent>().Subscribe(AfterDetailDeleted);
 
             CreateNewDetailCommand = new DelegateCommand<Type>(OnCreateNewDetailExecute);
@@ -62,23 +62,16 @@ namespace FriendOrganizer.UI.ViewModel
                     return;
                 }
             }
-            switch (args.ViewModelName)
-            {
-                case nameof(FriendDetailViewModel):
-                    DetailViewModel = _friendDetailViewModelCreator();
-                    break;
-                default:
-                    break;
-            }
-            DetailViewModel = _friendDetailViewModelCreator();
+            DetailViewModel = _detailViewModelCreator[args.ViewModelName];
+            //Gets an error here if I visit a newly created Meeting Detail View
             await DetailViewModel.LoadAsync(args.Id);
         }
 
-        private void OnCreateNewDetailExecute(Type viewmodelType)
+        private void OnCreateNewDetailExecute(Type viewModelType)
         {
             OnOpenDetailView(new OpenDetailViewEventArgs
             {
-                ViewModelName = viewmodelType.Name
+                ViewModelName = viewModelType.Name
             });
         }
 
