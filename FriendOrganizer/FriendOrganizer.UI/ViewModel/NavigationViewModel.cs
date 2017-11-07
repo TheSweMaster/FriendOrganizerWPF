@@ -88,8 +88,6 @@ namespace FriendOrganizer.UI.ViewModel
                 case nameof(MeetingDetailViewModel):
                     AfterDetailSaved(Meetings, args);
                     break;
-                default:
-                    break;
             }
             
         }
@@ -100,7 +98,7 @@ namespace FriendOrganizer.UI.ViewModel
             if (lookupItem == null)
             {
                 items.Add(new NavigationItemViewModel(args.Id, args.DisplayMember,
-                    nameof(args.ViewModelName), _eventAggregator));
+                    args.ViewModelName, _eventAggregator));
             }
             else
             {
