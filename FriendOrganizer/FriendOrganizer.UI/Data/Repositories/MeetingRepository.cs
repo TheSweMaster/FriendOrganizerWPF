@@ -23,5 +23,11 @@ namespace FriendOrganizer.UI.Data.Repositories
                 .SingleAsync(m => m.Id == id);
         }
 
+        public async Task<List<Friend>> GetAllFriendsAsync()
+        {
+            return await Context.Set<Friend>()
+                .ToListAsync();
+        }
+
     }
 }
