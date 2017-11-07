@@ -22,7 +22,6 @@ namespace FriendOrganizer.UI.ViewModel
     {
         private IProgrammingLanguageLookUpDataService _programmingLanguageLookUpDataService;
         private IFriendRepository _friendRepository;
-        private IMessageDialogService _messageDialoagService;
         private FriendWrapper _friend;
         private FriendPhoneNumberWrapper _selectedPhoneNumber;
 
@@ -30,10 +29,9 @@ namespace FriendOrganizer.UI.ViewModel
             IEventAggregator eventAggregator,
             IMessageDialogService messageDialoagService,
             IProgrammingLanguageLookUpDataService programmingLanguageLookUpDataService)
-            :base(eventAggregator)
+            :base(eventAggregator, messageDialoagService)
         {
             _friendRepository = friendRepository;
-            _messageDialoagService = messageDialoagService;
             _programmingLanguageLookUpDataService = programmingLanguageLookUpDataService;
 
             AddPhoneNumberCommand = new DelegateCommand(OnAddPhoneNumberExecute);
@@ -64,13 +62,13 @@ namespace FriendOrganizer.UI.ViewModel
             }
         }
 
-        public override async Task LoadAsync(int? friendId)
+        public override async Task LoadAsync(int friendId)
         {
-            var friend = friendId.HasValue
-                ? await _friendRepository.GetByIdAsync(friendId.Value)
+            var friend = friendId > 0
+                ? await _friendRepository.GetByIdAsync(friendId)
                 : CreateNewFriend();
 
-            Id = friend.Id;
+            Id = friendId;
 
             InitializeFriend(friend);
 
@@ -178,10 +176,10 @@ namespace FriendOrganizer.UI.ViewModel
         {
             if (await _friendRepository.HasMeetingsAsync(Friend.Id))
             {
-                _messageDialoagService.ShowInfoDialog($"{Friend.FirstName} {Friend.LastName} can't be deleted, as this friend is part a at least one meeting.");
+                MessageDialogService.ShowInfoDialog($"{Friend.FirstName} {Friend.LastName} can't be deleted, as this friend is part a at least one meeting.");
                 return;
             }
-            var result = _messageDialoagService.ShowOkCancelDialog($"Do you really want to delete the friend {Friend.FirstName} {Friend.LastName}?",
+            var result = MessageDialogService.ShowOkCancelDialog($"Do you really want to delete the friend {Friend.FirstName} {Friend.LastName}?",
                 "Question");
             if (result == MessageDialogResult.Ok)
             {
