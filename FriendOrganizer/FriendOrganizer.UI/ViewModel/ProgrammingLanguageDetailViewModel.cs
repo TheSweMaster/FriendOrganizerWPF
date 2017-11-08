@@ -10,6 +10,7 @@ using Prism.Commands;
 using System.Linq;
 using System.Windows.Input;
 using FriendOrganizer.Model;
+using System.Collections.Generic;
 
 namespace FriendOrganizer.UI.ViewModel
 {
@@ -47,7 +48,7 @@ namespace FriendOrganizer.UI.ViewModel
                   $" can't be removed, as it is referenced by at least one friend");
                 return;
             }
-
+            
             SelectedProgrammingLanguage.PropertyChanged -= Wrapper_PropertyChanged;
             _programmingLanguageRepository.Remove(SelectedProgrammingLanguage.Model);
             ProgrammingLanguages.Remove(SelectedProgrammingLanguage);
