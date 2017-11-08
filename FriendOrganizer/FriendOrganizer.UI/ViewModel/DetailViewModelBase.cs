@@ -106,11 +106,11 @@ namespace FriendOrganizer.UI.ViewModel
                 });
         }
 
-        protected virtual void OnCloseDetailViewExecute()
+        protected async virtual void OnCloseDetailViewExecute()
         {
             if (HasChanges)
             {
-                var result = MessageDialogService.ShowOkCancelDialog(
+                var result = await MessageDialogService.ShowOkCancelDialogAsync(
                     "You have made changes. Close this item?", "Question");
                 if (result == MessageDialogResult.Cancel)
                 {
@@ -136,13 +136,13 @@ namespace FriendOrganizer.UI.ViewModel
                 var databasevalue = ex.Entries.Single().GetDatabaseValues();
                 if (databasevalue == null)
                 {
-                    MessageDialogService.ShowInfoDialog("The entity has been deleted by another user");
+                    await MessageDialogService.ShowInfoDialog("The entity has been deleted by another user");
                     RaiseDetailDeletedEvent(Id);
                     return;
                 }
 
                 var entityName = ex.Entries.Single().Entity.GetType().Name;
-                var result = MessageDialogService.ShowOkCancelDialog($"The entity, {entityName} has been changed by someone else. " +
+                var result = await MessageDialogService.ShowOkCancelDialogAsync($"The entity, {entityName} has been changed by someone else. " +
                     "Click OK to save ur changes anyway, Click Cancel to realod the entity from the database.", "Question");
 
                 // Update the original values in with the databse-values - Client Wins
