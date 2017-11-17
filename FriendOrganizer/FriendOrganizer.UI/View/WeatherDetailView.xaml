@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
     
-    <Grid Grid.Column="2" Margin="0 5 5 5">
+    <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -26,8 +26,8 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Current Weather" FontWeight="Bold" Margin="5" HorizontalAlignment="Center" Foreground="White"/>
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="" FontWeight="Bold" Margin="5" HorizontalAlignment="Center" Foreground="White"/>
-
+        <Button Content="Update" Grid.Row="0" Grid.Column="1" Command="{Binding UpdateWeatherCommand}" Margin="5" Width="125"/>
+        
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Country: " Margin="5" Foreground="White"/>
         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding WeatherProp.location.country}" Margin="5" Foreground="White"/>
 
@@ -43,13 +43,13 @@
         <TextBlock Grid.Row="5" Grid.Column="0" Text="Temperature (C):" Margin="5" Foreground="White"/>
         <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding WeatherProp.current.temp_c}" Margin="5" Foreground="White"/>
 
-        <TextBlock Grid.Row="6" Grid.Column="0" Text="Humidity:" Margin="5" Foreground="White"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="Humidity (%):" Margin="5" Foreground="White"/>
         <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding WeatherProp.current.humidity}" Margin="5" Foreground="White"/>
 
         <TextBlock Grid.Row="7" Grid.Column="0" Text="Wind Direction:" Margin="5" Foreground="White"/>
         <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding WeatherProp.current.wind_dir}" Margin="5" Foreground="White"/>
 
-        <TextBlock Grid.Row="8" Grid.Column="0" Text="Wind Speed (Kph):" Margin="5" Foreground="White"/>
+        <TextBlock Grid.Row="8" Grid.Column="0" Text="Wind Speed (m/s):" Margin="5" Foreground="White"/>
         <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding WeatherProp.current.wind_kph}" Margin="5" Foreground="White"/>
 
         <TextBlock Grid.Row="9" Grid.Column="0" Text="Last Updated On:" Margin="5" Foreground="White"/>
