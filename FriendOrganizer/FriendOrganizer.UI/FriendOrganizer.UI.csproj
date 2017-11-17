@@ -202,6 +202,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\APIXULib\APIXULib.csproj">
+      <Project>{4951894A-7F30-40A8-B151-BDACFA570D25}</Project>
+      <Name>APIXULib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FriendOrganizer.DataAccess\FriendOrganizer.DataAccess.csproj">
       <Project>{aaab6ce5-314d-4dc5-aa78-86e98f017585}</Project>
       <Name>FriendOrganizer.DataAccess</Name>

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FriendOrganizer.UI.View"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="800" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -13,7 +13,8 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <DataGrid ItemsSource="{Binding ProgrammingLanguages}"
             SelectedItem="{Binding SelectedProgrammingLanguage, Mode=TwoWay}"
@@ -30,6 +31,55 @@
             <Button Content="Add" Command="{Binding AddCommand}" Margin="5" Width="125"/>
             <Button Content="Remove" Command="{Binding RemoveCommand}" Margin="5" Width="125"/>
         </StackPanel>
+
+        <Grid Grid.Column="2" Margin="0 5 5 5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="-- Current Weather --" Margin="5" HorizontalAlignment="Center" Foreground="White"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Country: " Margin="5" Foreground="White"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding WeatherProp.location.country}" Margin="5" Foreground="White"/>
+            
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="City Name: " Margin="5" Foreground="White"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding WeatherProp.location.name}" Margin="5" Foreground="White"/>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Image: " Margin="5" Foreground="White"/>
+            <Image Grid.Row="3" Grid.Column="1" Source="{Binding WeatherProp.current.condition.icon}" Margin="5"/>
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Condition: " Margin="5" Foreground="White"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding WeatherProp.current.condition.text}" Margin="5" Foreground="White"/>
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Temperature (C):" Margin="5" Foreground="White"/>
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding WeatherProp.current.temp_c}" Margin="5" Foreground="White"/>
+
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Humidity:" Margin="5" Foreground="White"/>
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding WeatherProp.current.humidity}" Margin="5" Foreground="White"/>
+
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="Wind Direction:" Margin="5" Foreground="White"/>
+            <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding WeatherProp.current.wind_dir}" Margin="5" Foreground="White"/>
+
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="Wind Speed (Kph):" Margin="5" Foreground="White"/>
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding WeatherProp.current.wind_kph}" Margin="5" Foreground="White"/>
+
+            <TextBlock Grid.Row="9" Grid.Column="0" Text="Last Updated On:" Margin="5" Foreground="White"/>
+            <TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding WeatherProp.current.last_updated}" Margin="5" Foreground="White"/>
+
+        </Grid>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button Content="Save" Width="125" Margin="10"

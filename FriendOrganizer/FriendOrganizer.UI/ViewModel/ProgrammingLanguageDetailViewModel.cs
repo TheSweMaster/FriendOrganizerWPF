@@ -11,11 +11,14 @@ using System.Linq;
 using System.Windows.Input;
 using FriendOrganizer.Model;
 using System.Collections.Generic;
+using APIXULib;
 
 namespace FriendOrganizer.UI.ViewModel
 {
     public class ProgrammingLanguageDetailViewModel : DetailViewModelBase
     {
+        //Replace this with your own key from https://www.apixu.com/ 
+        private readonly string key = "412b3379a4c143f59d7115910170610";
         private IProgrammingLanguageRepository _programmingLanguageRepository;
         private ProgrammingLanguageWrapper _selectedProgrammingLanguage;
 
@@ -70,6 +73,10 @@ namespace FriendOrganizer.UI.ViewModel
 
         public ObservableCollection<ProgrammingLanguageWrapper> ProgrammingLanguages { get; }
 
+        public WeatherModel WeatherProp { get; set; }
+
+        public Current CurrentWeatherProp { get; set; }
+
         public ICommand AddCommand { get; }
 
         public ICommand RemoveCommand { get; }
@@ -87,6 +94,29 @@ namespace FriendOrganizer.UI.ViewModel
 
         public async override Task LoadAsync(int id)
         {
+            IRepository repo = new Repository();
+            var getCityForecastWeatherResult = repo.GetWeatherData(key, GetBy.CityName, "goeteborg", Days.One);
+
+            //To make the icon a real http link
+            getCityForecastWeatherResult.current.condition.icon = "http:" + getCityForecastWeatherResult.current.condition.icon;
+
+            WeatherProp = getCityForecastWeatherResult;
+
+            var testWeatherModel = new WeatherModel() {
+                current = new Current()
+                {
+                    temp_c = 22.0,
+                    condition = new Condition() { text = "Cloudy", icon = "https://cdn3.iconfinder.com/data/icons/weather-and-forecast/51/Weather_icons_grey-03-512.png" },
+                    wind_kph = 5.0,
+                    cloud = 420
+                },
+                location = new Location()
+                {
+                    country = "Sweden",
+                    name = "My City"
+                }
+            };
+
             Id = id;
 
             foreach (var wrapper in ProgrammingLanguages)
