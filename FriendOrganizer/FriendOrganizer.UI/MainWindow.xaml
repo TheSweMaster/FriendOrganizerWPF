@@ -20,6 +20,9 @@
         <DataTemplate DataType="{x:Type viewModel:ProgrammingLanguageDetailViewModel}">
             <view:ProgrammingLanguageDetailView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:WeatherDetailViewModel}">
+            <view:WeatherDetailView/>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -42,6 +45,11 @@
                 <MenuItem Header="Programming Languages"
                           Command="{Binding OpenSingleDetailViewCommand}"
                           CommandParameter="{x:Type viewModel:ProgrammingLanguageDetailViewModel}"/>
+            </MenuItem>
+            <MenuItem Header="Weather API">
+                <MenuItem Header="Current Weather"
+                          Command="{Binding OpenSingleDetailViewCommand}"
+                          CommandParameter="{x:Type viewModel:WeatherDetailViewModel}"/>
             </MenuItem>
         </Menu>
         <view:NavigationView Grid.Row="1" Grid.Column="0" DataContext="{Binding NavigationViewModel}"/>

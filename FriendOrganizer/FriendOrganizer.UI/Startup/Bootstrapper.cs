@@ -30,6 +30,8 @@ namespace FriendOrganizer.UI.Startup
                 .Keyed<IDetailViewModel>(nameof(MeetingDetailViewModel));
             builder.RegisterType<ProgrammingLanguageDetailViewModel>()
                 .Keyed<IDetailViewModel>(nameof(ProgrammingLanguageDetailViewModel));
+            builder.RegisterType<WeatherDetailViewModel>()
+                .Keyed<IDetailViewModel>(nameof(WeatherDetailViewModel));
 
             builder.RegisterType<LookUpDataService>().AsImplementedInterfaces();
             builder.RegisterType<FriendRepository>().As<IFriendRepository>();
