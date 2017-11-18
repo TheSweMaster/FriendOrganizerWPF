@@ -81,7 +81,7 @@ namespace FriendOrganizer.UI.ViewModel
                     condition = new Condition()
                     {
                         text = "Cloudy",
-                        icon = "https://cdn3.iconfinder.com/data/icons/weather-and-forecast/51/Weather_icons_grey-03-512.png"
+                        icon = "http://cdn.apixu.com/weather/64x64/day/302.png"
                     },
                     wind_kph = 5.0,
                     cloud = 420

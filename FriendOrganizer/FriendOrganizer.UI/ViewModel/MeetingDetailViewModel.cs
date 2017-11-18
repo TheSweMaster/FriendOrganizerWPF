@@ -12,11 +12,14 @@ using Prism.Commands;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using FriendOrganizer.UI.Event;
+using APIXULib;
 
 namespace FriendOrganizer.UI.ViewModel
 {
     public class MeetingDetailViewModel : DetailViewModelBase, IMeetingDetailViewModel
     {
+        //Please replace this with your own key from https://www.apixu.com/ 
+        private readonly string key = "412b3379a4c143f59d7115910170610";
         private MeetingWrapper _meeting;
         private IMeetingRepository _meetingRepository;
         private Friend _selectedAvailableFriend;
@@ -31,12 +34,14 @@ namespace FriendOrganizer.UI.ViewModel
             eventAggregator.GetEvent<AfterDetailSavedEvent>().Subscribe(AfterDetailSaved);
             eventAggregator.GetEvent<AfterDetailDeletedEvent>().Subscribe(AfterDetailDeleted);
 
+            WeatherModels = new ObservableCollection<WeatherDisplayModel>();
             AddedFriends = new ObservableCollection<Friend>();
             AvailableFriends = new ObservableCollection<Friend>();
             AddFriendCommand = new DelegateCommand(OnAddFriendExecute, OnAddFriendCanExecute);
             RemoveFriendCommand = new DelegateCommand(OnRemoveFriendExecute, OnRemoveFriendCanExecute);
         }
 
+        public ObservableCollection<WeatherDisplayModel> WeatherModels { get; set; }
         public ObservableCollection<Friend> AddedFriends { get; }
         public ObservableCollection<Friend> AvailableFriends { get; }
         public ICommand AddFriendCommand { get; }
@@ -80,6 +85,8 @@ namespace FriendOrganizer.UI.ViewModel
                 ? await _meetingRepository.GetByIdAsync(meetingId)
                 : CreateNewMeeting();
 
+            GetWeather(meeting.DateFrom, meeting.DateTo);
+
             Id = meetingId;
 
             InitializeMeeting(meeting);
@@ -87,6 +94,84 @@ namespace FriendOrganizer.UI.ViewModel
             _allFriends = await _meetingRepository.GetAllFriendsAsync();
 
             SetupPickList();
+        }
+
+        private void GetWeather(DateTime dateFrom, DateTime dateTo)
+        {
+            //var weatherDisplayModel = new WeatherDisplayModel();
+            IRepository repo = new Repository();
+            var dateNow = DateTime.Today;
+            int fromForecastDays = 0;
+            int toForecastDays = 0;
+
+            // TODO: Weather date logic
+            if (dateFrom.Date <= dateNow.AddDays(10).Date && dateFrom.Date >= dateNow.Date)
+            {
+                var timeSpan = dateFrom.Date - dateNow.Date;
+                fromForecastDays = timeSpan.Days;
+            }
+
+            if (dateTo.Date <= dateNow.AddDays(10).Date && dateTo.Date >= dateNow.Date)
+            {
+                var timeSpan = dateTo.Date - dateNow.Date;
+                toForecastDays = timeSpan.Days;
+            }
+
+            //var testWeatherModel = CreateTestWeatherModel();
+            //var cityWeatherResult = repo.GetWeatherData(key, GetBy.CityName, "goeteborg", Days.One);
+            //var cityWeatherResult = repo.GetWeatherData(key, GetBy.Zip, "goeteborg", Days.One);
+
+            var localWeatherResult = repo.GetWeatherDataByAutoIP(key, Days.Ten);
+            //localWeatherResult = FixWeatherIconLink(localWeatherResult);
+
+            var weatherDisplayModelFromDate = new WeatherDisplayModel()
+            {
+                Icon = "http:" + localWeatherResult.forecast.forecastday[fromForecastDays].day.condition.icon,
+                Text = $"Date: {localWeatherResult.forecast.forecastday[fromForecastDays].date} " +
+                $"Temp: Min {localWeatherResult.forecast.forecastday[fromForecastDays].day.mintemp_c}°C, " +
+                $"Max {localWeatherResult.forecast.forecastday[fromForecastDays].day.maxtemp_c}°C"
+            };
+
+            var weatherDisplayModelToDate = new WeatherDisplayModel()
+            {
+                Icon = "http:" + localWeatherResult.forecast.forecastday[toForecastDays].day.condition.icon,
+                Text = $"Date: {localWeatherResult.forecast.forecastday[toForecastDays].date} " +
+                $"Temp: Min {localWeatherResult.forecast.forecastday[toForecastDays].day.mintemp_c}°C, " +
+                $"Max {localWeatherResult.forecast.forecastday[toForecastDays].day.maxtemp_c}°C"
+            };
+
+            WeatherModels.Add(weatherDisplayModelFromDate);
+            WeatherModels.Add(weatherDisplayModelToDate);
+
+        }
+
+        private static WeatherModel FixWeatherIconLink(WeatherModel weatherModel)
+        {
+            weatherModel.current.condition.icon = "http:" + weatherModel.current.condition.icon;
+            return weatherModel;
+        }
+
+        private WeatherModel CreateTestWeatherModel()
+        {
+            return new WeatherModel()
+            {
+                current = new Current()
+                {
+                    temp_c = 22.0,
+                    condition = new Condition()
+                    {
+                        text = "Cloudy",
+                        icon = "http://cdn.apixu.com/weather/64x64/day/302.png"
+                    },
+                    wind_kph = 5.0,
+                    cloud = 420
+                },
+                location = new Location()
+                {
+                    country = "Sweden",
+                    name = "My City"
+                }
+            };
         }
 
         private void SetupPickList()

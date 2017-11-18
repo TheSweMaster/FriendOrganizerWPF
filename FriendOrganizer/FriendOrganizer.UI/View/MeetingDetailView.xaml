@@ -19,15 +19,25 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Content="Title" Margin="10 10 10 0"/>
-        <TextBox Grid.Row="1" Text="{Binding Meeting.Title,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10 0 10 10"/>
-
-        <Label Grid.Row="2" Content="Start" Margin="10 0"/>
-        <toolkit:DateTimePicker Grid.Row="3" Value="{Binding Meeting.DateFrom,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10 0 10 10"/>
-
-        <Label Grid.Row="4" Content="End" Margin="10 0"/>
-        <toolkit:DateTimePicker Grid.Row="5" Value="{Binding Meeting.DateTo,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10 0 10 10"/>
         
+        <Label Content="Title" Margin="10 10 10 0"/>
+        <Label Content="Weather Forecast On Meeting Days" Margin="10 10 10 0" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="1" Width="400" HorizontalAlignment="Left" Text="{Binding Meeting.Title,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10 0 10 10"/>
+
+        <Label Grid.Row="2" Content="Start-Date" Margin="10 0"/>
+        <toolkit:DateTimePicker Grid.Row="3" Value="{Binding Meeting.DateFrom,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10 0 10 10"/>
+
+        <!--<TextBox Grid.Row="2" Text="Date: 2017-05-03, Temp: Min 2C, Max 12C" Margin="10 0" HorizontalAlignment="Right"/>-->
+        <!--<Image Grid.Row="3" Grid.Column="1" Source="http://cdn.apixu.com/weather/64x64/day/302.png" Height="64" Width="64" HorizontalAlignment="Right" Margin="10 0 10 10"/>-->
+        <TextBlock Grid.Row="2" Text="{Binding WeatherModels[0].Text}" HorizontalAlignment="Right" Margin="10 0"/>
+        <Image Grid.Row="3" Source="{Binding WeatherModels[0].Icon}" Height="64" Width="64" HorizontalAlignment="Right" Margin="10 0 10 10"/>
+
+        <Label Grid.Row="4" Content="End-Date" Margin="10 0"/>
+        <toolkit:DateTimePicker Grid.Row="5" Value="{Binding Meeting.DateTo,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10 0 10 10"/>
+
+        <TextBlock Grid.Row="4" Text="{Binding WeatherModels[1].Text}" HorizontalAlignment="Right" Margin="10 0"/>
+        <Image Grid.Row="5" Source="{Binding WeatherModels[1].Icon}" Height="64" Width="64" HorizontalAlignment="Right" Margin="10 0 10 10"/>
+
         <Grid Grid.Row="6" Margin="10">
             <Grid.Resources>
                 <DataTemplate DataType="{x:Type model:Friend}">

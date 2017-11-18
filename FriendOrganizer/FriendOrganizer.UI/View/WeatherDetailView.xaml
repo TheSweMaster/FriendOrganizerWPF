@@ -40,7 +40,7 @@
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Condition: " Margin="5" Foreground="White"/>
         <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding WeatherProp.current.condition.text}" Margin="5" Foreground="White"/>
 
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="Temperature (C):" Margin="5" Foreground="White"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Temperature (&#8451;):" Margin="5" Foreground="White"/>
         <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding WeatherProp.current.temp_c}" Margin="5" Foreground="White"/>
 
         <TextBlock Grid.Row="6" Grid.Column="0" Text="Humidity (%):" Margin="5" Foreground="White"/>
