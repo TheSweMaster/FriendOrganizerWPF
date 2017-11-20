@@ -96,15 +96,13 @@ namespace FriendOrganizer.UI.ViewModel
             SetupPickList();
         }
 
-        private void GetWeather(DateTime dateFrom, DateTime dateTo)
+        private async void GetWeather(DateTime dateFrom, DateTime dateTo)
         {
-            //var weatherDisplayModel = new WeatherDisplayModel();
             IRepository repo = new Repository();
             var dateNow = DateTime.Today;
-            int fromForecastDays = 0;
-            int toForecastDays = 0;
+            int fromForecastDays = -1;
+            int toForecastDays = -1;
 
-            // TODO: Weather date logic
             if (dateFrom.Date <= dateNow.AddDays(10).Date && dateFrom.Date >= dateNow.Date)
             {
                 var timeSpan = dateFrom.Date - dateNow.Date;
@@ -116,39 +114,66 @@ namespace FriendOrganizer.UI.ViewModel
                 var timeSpan = dateTo.Date - dateNow.Date;
                 toForecastDays = timeSpan.Days;
             }
-
-            //var testWeatherModel = CreateTestWeatherModel();
-            //var cityWeatherResult = repo.GetWeatherData(key, GetBy.CityName, "goeteborg", Days.One);
-            //var cityWeatherResult = repo.GetWeatherData(key, GetBy.Zip, "goeteborg", Days.One);
-
-            var localWeatherResult = repo.GetWeatherDataByAutoIP(key, Days.Ten);
-            //localWeatherResult = FixWeatherIconLink(localWeatherResult);
-
-            var weatherDisplayModelFromDate = new WeatherDisplayModel()
+            
+            var localWeatherResult = new WeatherModel();
+            try
             {
-                Icon = "http:" + localWeatherResult.forecast.forecastday[fromForecastDays].day.condition.icon,
-                Text = $"Date: {localWeatherResult.forecast.forecastday[fromForecastDays].date} " +
-                $"Temp: Min {localWeatherResult.forecast.forecastday[fromForecastDays].day.mintemp_c}°C, " +
-                $"Max {localWeatherResult.forecast.forecastday[fromForecastDays].day.maxtemp_c}°C"
-            };
-
-            var weatherDisplayModelToDate = new WeatherDisplayModel()
+                localWeatherResult = repo.GetWeatherDataByAutoIP(key, Days.Ten);
+                //var cityWeatherResult = repo.GetWeatherData(key, GetBy.CityName, "goeteborg", Days.One);
+            }
+            catch (Exception ex)
             {
-                Icon = "http:" + localWeatherResult.forecast.forecastday[toForecastDays].day.condition.icon,
-                Text = $"Date: {localWeatherResult.forecast.forecastday[toForecastDays].date} " +
-                $"Temp: Min {localWeatherResult.forecast.forecastday[toForecastDays].day.mintemp_c}°C, " +
-                $"Max {localWeatherResult.forecast.forecastday[toForecastDays].day.maxtemp_c}°C"
-            };
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
+                await MessageDialogService.ShowInfoDialog($"The Weather data could not be loaded.");
+                return;
+            }
 
+            WeatherDisplayModel weatherDisplayModelFromDate;
+            if (fromForecastDays >= 0 && fromForecastDays <= 10)
+            {
+                weatherDisplayModelFromDate = new WeatherDisplayModel()
+                {
+                    Icon = "http:" + localWeatherResult.forecast.forecastday[fromForecastDays].day.condition.icon,
+                    Text = $"Date: {localWeatherResult.forecast.forecastday[fromForecastDays].date} " +
+                    $"Temp: Min {localWeatherResult.forecast.forecastday[fromForecastDays].day.mintemp_c}°C, " +
+                    $"Max {localWeatherResult.forecast.forecastday[fromForecastDays].day.maxtemp_c}°C"
+                };
+            }
+            else
+            {
+                weatherDisplayModelFromDate = new WeatherDisplayModel()
+                {
+                    Icon = "",
+                    Text = $"No weather data can be found at this date..."
+                };
+            }
+
+            WeatherDisplayModel weatherDisplayModelToDate;
+            if (toForecastDays >= 0 && toForecastDays <= 10)
+            {
+                weatherDisplayModelToDate = new WeatherDisplayModel()
+                {
+                    Icon = "http:" + localWeatherResult.forecast.forecastday[toForecastDays].day.condition.icon,
+                    Text = $"Date: {localWeatherResult.forecast.forecastday[toForecastDays].date} " +
+                    $"Temp: Min {localWeatherResult.forecast.forecastday[toForecastDays].day.mintemp_c}°C, " +
+                    $"Max {localWeatherResult.forecast.forecastday[toForecastDays].day.maxtemp_c}°C"
+                };
+            }
+            else
+            {
+                weatherDisplayModelToDate = new WeatherDisplayModel()
+                {
+                    Icon = "",
+                    Text = $"No weather data can be found at this date..."
+                };
+            }
+
+            WeatherModels.Clear();
             WeatherModels.Add(weatherDisplayModelFromDate);
             WeatherModels.Add(weatherDisplayModelToDate);
-
-        }
-
-        private static WeatherModel FixWeatherIconLink(WeatherModel weatherModel)
-        {
-            weatherModel.current.condition.icon = "http:" + weatherModel.current.condition.icon;
-            return weatherModel;
         }
 
         private WeatherModel CreateTestWeatherModel()
@@ -259,6 +284,8 @@ namespace FriendOrganizer.UI.ViewModel
             HasChanges = _meetingRepository.HasChanges();
             Id = Meeting.Id;
             RaiseDetailSavedEvent(Meeting.Id, Meeting.Title);
+            //Updates weather when saving
+            GetWeather(Meeting.Model.DateFrom, Meeting.Model.DateTo);
         }
 
         private bool OnRemoveFriendCanExecute()

@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -28,9 +30,9 @@ namespace FriendOrganizer.UI.ViewModel
             UpdateWeatherCommand = new DelegateCommand(OnUpdateWeatherExecute);
         }
 
-        private void OnUpdateWeatherExecute()
+        private async void OnUpdateWeatherExecute()
         {
-            WeatherProp = GetWeather();
+            WeatherProp = await GetWeather();
         }
 
         public WeatherModel WeatherProp { get; set; }
@@ -41,21 +43,33 @@ namespace FriendOrganizer.UI.ViewModel
 
         public async override Task LoadAsync(int id)
         {
-            WeatherProp = GetWeather();
-
+            WeatherProp = await GetWeather();
             Id = id;
+
             await Task.CompletedTask;
         }
 
-        private WeatherModel GetWeather()
+        private async Task<WeatherModel> GetWeather()
         {
             IRepository repo = new Repository();
-            var testWeatherModel = CreateTestWeatherModel();
-            var cityWeatherResult = repo.GetWeatherData(key, GetBy.CityName, "goeteborg", Days.One);
-            var localWeatherResult = repo.GetWeatherDataByAutoIP(key, Days.One);
-
-            localWeatherResult = FixWeatherIconLink(localWeatherResult);
-            localWeatherResult = ConvertWeatherKmphToMps(localWeatherResult);
+            //var testWeatherModel = CreateTestWeatherModel();
+            WeatherModel localWeatherResult = new WeatherModel();
+            try
+            {
+                localWeatherResult = repo.GetWeatherDataByAutoIP(key, Days.One);
+                localWeatherResult = FixWeatherIconLink(localWeatherResult);
+                localWeatherResult = ConvertWeatherKmphToMps(localWeatherResult);
+                //var cityWeatherResult = repo.GetWeatherData(key, GetBy.CityName, "goeteborg", Days.One);
+            }
+            catch (Exception ex)
+            {
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
+                await MessageDialogService.ShowInfoDialog($"The Weather data could not be loaded.");
+            }
+            
             return localWeatherResult;
         }
 
