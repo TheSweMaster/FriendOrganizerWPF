@@ -121,12 +121,8 @@ namespace FriendOrganizer.UI.ViewModel
                 localWeatherResult = repo.GetWeatherDataByAutoIP(key, Days.Ten);
                 //var cityWeatherResult = repo.GetWeatherData(key, GetBy.CityName, "goeteborg", Days.One);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                while (ex.InnerException != null)
-                {
-                    ex = ex.InnerException;
-                }
                 await MessageDialogService.ShowInfoDialog($"The Weather data could not be loaded.");
                 return;
             }
@@ -142,6 +138,7 @@ namespace FriendOrganizer.UI.ViewModel
                     $"Max {localWeatherResult.forecast.forecastday[fromForecastDays].day.maxtemp_c}°C"
                 };
             }
+
             else
             {
                 weatherDisplayModelFromDate = new WeatherDisplayModel()
@@ -152,6 +149,7 @@ namespace FriendOrganizer.UI.ViewModel
             }
 
             WeatherDisplayModel weatherDisplayModelToDate;
+
             if (toForecastDays >= 0 && toForecastDays <= 10)
             {
                 weatherDisplayModelToDate = new WeatherDisplayModel()

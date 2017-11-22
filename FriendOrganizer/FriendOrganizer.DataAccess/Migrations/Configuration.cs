@@ -45,11 +45,37 @@ namespace FriendOrganizer.DataAccess.Migrations
             new Meeting
             {
                 Title = "Watching Floorball",
-                DateFrom = new DateTime(2018, 5, 26),
-                DateTo = new DateTime(2018, 5, 26),
+                DateFrom = DateTime.Now.AddDays(1),
+                DateTo = DateTime.Now.AddDays(8),
                 Friends = new List<Friend>
                 {
                     context.Friends.Single(f => f.FirstName == "Jacob" && f.LastName == "Gandis"),
+                    context.Friends.Single(f => f.FirstName == "Anders" && f.LastName == "Svensson")
+                }
+            });
+
+            context.Meetings.AddOrUpdate(m => m.Title,
+            new Meeting
+            {
+                Title = "Learning WPF",
+                DateFrom = DateTime.Now.AddDays(-1),
+                DateTo = DateTime.Now.AddDays(5),
+                Friends = new List<Friend>
+                {
+                    context.Friends.Single(f => f.FirstName == "Jacob" && f.LastName == "Gandis"),
+                    context.Friends.Single(f => f.FirstName == "Samuel" && f.LastName == "Samuelsson")
+                }
+            });
+
+            context.Meetings.AddOrUpdate(m => m.Title,
+            new Meeting
+            {
+                Title = "Important Stuff",
+                DateFrom = DateTime.Now.AddDays(2),
+                DateTo = DateTime.Now.AddDays(12),
+                Friends = new List<Friend>
+                {
+                    context.Friends.Single(f => f.FirstName == "Julia" && f.LastName == "Kvist"),
                     context.Friends.Single(f => f.FirstName == "Anders" && f.LastName == "Svensson")
                 }
             });

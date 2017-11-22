@@ -26,18 +26,10 @@ namespace FriendOrganizer.UI.ViewModel
             : base(eventAggregator, messageDialogService)
         {
             Title = "Weather Details";
-            WeatherPropList = new ObservableCollection<WeatherModel>();
             UpdateWeatherCommand = new DelegateCommand(OnUpdateWeatherExecute);
         }
 
-        private async void OnUpdateWeatherExecute()
-        {
-            WeatherProp = await GetWeather();
-        }
-
         public WeatherModel WeatherProp { get; set; }
-
-        public ObservableCollection<WeatherModel> WeatherPropList { get; }
 
         public ICommand UpdateWeatherCommand { get; }
 
@@ -61,16 +53,17 @@ namespace FriendOrganizer.UI.ViewModel
                 localWeatherResult = ConvertWeatherKmphToMps(localWeatherResult);
                 //var cityWeatherResult = repo.GetWeatherData(key, GetBy.CityName, "goeteborg", Days.One);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                while (ex.InnerException != null)
-                {
-                    ex = ex.InnerException;
-                }
                 await MessageDialogService.ShowInfoDialog($"The Weather data could not be loaded.");
             }
             
             return localWeatherResult;
+        }
+
+        private async void OnUpdateWeatherExecute()
+        {
+            WeatherProp = await GetWeather();
         }
 
         private WeatherModel ConvertWeatherKmphToMps(WeatherModel weatherModel)
