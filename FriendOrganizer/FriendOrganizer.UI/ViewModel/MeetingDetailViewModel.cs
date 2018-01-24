@@ -103,13 +103,13 @@ namespace FriendOrganizer.UI.ViewModel
             int fromForecastDays = -1;
             int toForecastDays = -1;
 
-            if (dateFrom.Date <= dateNow.AddDays(10).Date && dateFrom.Date >= dateNow.Date)
+            if (dateFrom.Date <= dateNow.AddDays(7).Date && dateFrom.Date >= dateNow.Date)
             {
                 var timeSpan = dateFrom.Date - dateNow.Date;
                 fromForecastDays = timeSpan.Days;
             }
 
-            if (dateTo.Date <= dateNow.AddDays(10).Date && dateTo.Date >= dateNow.Date)
+            if (dateTo.Date <= dateNow.AddDays(7).Date && dateTo.Date >= dateNow.Date)
             {
                 var timeSpan = dateTo.Date - dateNow.Date;
                 toForecastDays = timeSpan.Days;
@@ -118,7 +118,7 @@ namespace FriendOrganizer.UI.ViewModel
             var localWeatherResult = new WeatherModel();
             try
             {
-                localWeatherResult = repo.GetWeatherDataByAutoIP(key, Days.Ten);
+                localWeatherResult = repo.GetWeatherDataByAutoIP(key, Days.Seven);
                 //var cityWeatherResult = repo.GetWeatherData(key, GetBy.CityName, "goeteborg", Days.One);
             }
             catch (Exception)
@@ -128,7 +128,7 @@ namespace FriendOrganizer.UI.ViewModel
             }
 
             WeatherDisplayModel weatherDisplayModelFromDate;
-            if (fromForecastDays >= 0 && fromForecastDays <= 10)
+            if (fromForecastDays >= 0 && fromForecastDays <= 7)
             {
                 weatherDisplayModelFromDate = new WeatherDisplayModel()
                 {
@@ -150,7 +150,7 @@ namespace FriendOrganizer.UI.ViewModel
 
             WeatherDisplayModel weatherDisplayModelToDate;
 
-            if (toForecastDays >= 0 && toForecastDays <= 10)
+            if (toForecastDays >= 0 && toForecastDays <= 7)
             {
                 weatherDisplayModelToDate = new WeatherDisplayModel()
                 {
